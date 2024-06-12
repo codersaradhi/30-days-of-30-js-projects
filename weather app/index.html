@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font family -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e315459fa8.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/jpeg" href="./favicon_io/android-chrome-512x512.png">
+    <title>Wheather app</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background-image: linear-gradient(#289eff3a, #ffa22859), url(./cloud_background.jpg);
+            display: grid;
+            align-items: center;
+            justify-items: center;
+            color: white;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width: 30%;
+            max-width: 470px;
+            height: 90vh;
+            /* background-image: linear-gradient(135deg, #00ffc3, #0091ff); */
+            backdrop-filter: blur(30px);
+            box-shadow: 0px 0px 30px rgba(227, 228, 237, 0.37);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            /* margin-top: 30px; */
+            border-radius: 30px;
+        }
+
+        .search {
+            width: 88%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .search input {
+            border: 0;
+            outline: 0;
+            background-color: #ebfffc;
+            color: #555;
+            padding: 10px 25px;
+            height: 60px;
+            border-radius: 30px;
+            flex: 1;
+            margin-right: 16px;
+            font-size: 18px;
+        }
+
+        .search button {
+            border: none;
+            border-radius: 100px;
+            background-color: #ebfffc;
+            color: #555;
+            height: 60px;
+            width: 60px;
+            cursor: pointer;
+        }
+
+        .fa-magnifying-glass {
+            font-size: 25px;
+        }
+
+        .Wheather-icon {
+            width: 200px;
+            height: 200px;
+        }
+
+        .weather {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 70%;
+
+        }
+
+        .details {
+            width: 75%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 20px;
+        }
+
+        .fa-umbrella,
+        .fa-wind,
+        .fa-temperature-half {
+            font-size: 50px;
+        }
+
+        .qualities {
+            font-size: 15px;
+        }
+
+        span {
+            font-size: 20px;
+        }
+
+        .weather h1 {
+            font-size: 50px;
+        }
+
+        .weather h2 {
+            font-size: 45px;
+        }
+
+        .weather,
+        .details {
+            display: none;
+        }
+
+        .error {
+            text-align: center;
+            color: #555;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="search">
+            <input type="text" placeholder="Enter the City name" spellcheck="false">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="error">
+            <p>Invalid City name</p>
+        </div>
+        <div class="weather">
+            <img src="./images/rain.png" alt="" class="Wheather-icon">
+            <h1 class="temp">22°C</h1>
+            <h2 class="city">Voolpalli</h2>
+        </div>
+        <div class="details">
+            <div class="col">
+                <i class="fa-solid fa-wind"></i>
+                <p class="wind">15 </p>
+                <p class="qualities">wind speed</p>
+            </div>
+            <div class="col">
+                <i class="fa-solid fa-umbrella"></i>
+                <p class="Humidity">50</p>
+                <p class="qualities">Humidity</p>
+            </div>
+            <div class="col">
+                <i class="fa-solid fa-temperature-half"></i>
+                <p class="qualities">High: <span class="max_temp">36</span></p>
+                <p class="qualities">Low: <span class="min_temp">22</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const apiKey = "07898c1164df6ed52af98d686f8207ee";
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    const searchBox = document.querySelector(".search input");
+    const searchBtn = document.querySelector(".search button")
+    const weatherIcon = document.querySelector(".Wheather-icon");
+    async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        if (response.status == 404) {
+            document.querySelector(".error").style.display ="block";
+            document.querySelector(".none").style.display ="none";
+        }
+        else {
+            var data = await response.json();
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + " °C";
+            document.querySelector(".Humidity").innerHTML = data.main.humidity + " %";
+            document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+            document.querySelector(".max_temp").innerHTML = Math.round(data.main.temp_max) + " °C";
+            document.querySelector(".min_temp").innerHTML = Math.round(data.main.temp_min) + " °C";
+
+            if (data.weather[0].main == "Clouds") {
+                weatherIcon.src = "./images/clouds.png";
+            } else if (data.weather[0].main == "Clear") {
+                weatherIcon.src = "./images/clear.png";
+            }
+            else if (data.weather[0].main == "Rain") {
+                weatherIcon.src = "./images/rain.png";
+            }
+            else if (data.weather[0].main == "Drizzle") {
+                weatherIcon.src = "./images/drizzle.png";
+            }
+            else if (data.weather[0].main == "Mist") {
+                weatherIcon.src = "./images/mist.png";
+            }
+            else if (data.weather[0].main == "Snow") {
+                weatherIcon.src = "./images/snow.png";
+            }
+            document.querySelector(".weather").style.display = "flex";
+            document.querySelector(".details").style.display = "flex";
+            document.querySelector(".error").style.display = "none";
+        }
+
+
+    }
+    searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+    })
+    document.addEventListener("keydown", event => {
+        if (event.key === 'Enter') {
+            checkWeather(searchBox.value);
+            searchBox.value = "";
+        }
+    })
+
+</script>
+
+</html>
