@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font size -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e315459fa8.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/jpeg" href="./images/icon.png">
+    <title>Quiz app</title>
+</head>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    .container {
+        width: 100%;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #153677, #4e085f);
+        padding: 10px;
+    }
+
+    .app {
+        background: #fff;
+        width: 90%;
+        max-width: 600px;
+        margin: 100px auto 0px;
+        padding: 30px;
+        border-radius: 10px;
+    }
+
+    .app h1 {
+        /* font-weight: 25px; */
+        color: #001e4d;
+        font-weight: 600;
+        border-bottom: 1px solid #333;
+        padding-bottom: 30px;
+    }
+
+    .quiz {
+        padding: 20px 0;
+    }
+
+    .quiz h2 {
+        font-size: 18px;
+        color: #001e4d;
+        font-weight: 600;
+    }
+
+    .btn {
+        background: #fff;
+        color: #222;
+        font-weight: 500;
+        width: 100%;
+        border: 1px solid #222;
+        padding: 10px;
+        margin: 10px 0;
+        text-align: left;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn:hover:not([disabled]){
+        background: #222;
+        color: #fff;
+    }
+    .btn:disabled{
+        cursor: no-drop;
+    }
+    #Next-btn {
+        background: #001e4d;
+        color: #fff;
+        width: 150px;
+        padding: 10px;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 20px auto 0;
+        font-size: 20px;
+        display: none;
+
+    }
+
+    .correct {
+        background: #9aeabc;
+    }
+
+    .incorrect {
+        background: #ff9393;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="app">
+            <h1>Simple Quiz</h1>
+            <h2 id="question">Question goes here</h2>
+            <div id="answer-buttons">
+                <div class="btn">Answer 1</div>
+                <div class="btn">Answer 2</div>
+                <div class="btn">Answer 3</div>
+                <div class="btn">Answer 4</div>
+            </div>
+            <button id="Next-btn">Next</button>
+        </div>
+    </div>
+</body>
+
+<script>
+    const questions = [
+        {
+            question: "1 + 1 = ?",
+            answers: [
+                { text: "1", correct: false },
+                { text: "4", correct: false },
+                { text: "0", correct: false },
+                { text: "2", correct: true },
+            ]
+        },
+        {
+            question: "1 - 1 = ?",
+            answers: [
+                { text: "1", correct: false },
+                { text: "4", correct: false },
+                { text: "0", correct: true },
+                { text: "2", correct: false },
+            ]
+        },
+        {
+            question: "1 * 1 = ?",
+            answers: [
+                { text: "1", correct: true },
+                { text: "4", correct: false },
+                { text: "0", correct: false },
+                { text: "2", correct: false },
+            ]
+        },
+        {
+            question: "1 / 1 = ?",
+            answers: [
+                { text: "1", correct: true },
+                { text: "4", correct: false },
+                { text: "0", correct: false },
+                { text: "2", correct: false },
+            ]
+        }
+    ];
+    const questionElement = document.getElementById("question");
+    const answerButtons = document.getElementById("answer-buttons");
+    const nextButton = document.getElementById("Next-btn");
+    let currentQuestionIndex = 0;
+    let score = 0;
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        nextButton.innerHTML = "Next";
+        showQuestion();
+    }
+    function showQuestion() {
+        resetState();
+        let currentQuestion = questions[currentQuestionIndex];
+        let questionNo = currentQuestionIndex + 1;
+        questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+
+        currentQuestion.answers.forEach(answer => {
+            const button = document.createElement("button");
+            button.innerHTML = answer.text;
+            button.classList.add("btn");
+            answerButtons.appendChild(button);
+            if (answer.correct) {
+                button.dataset.correct = answer.correct;
+            }
+            button.addEventListener("click", selectAnswer);
+        });
+    }
+    function resetState() {
+        nextButton.style.display = "none";
+        while (answerButtons.firstChild) {
+            answerButtons.removeChild(answerButtons.firstChild);
+        }
+    }
+    function selectAnswer(e) {
+        const selectedBtn = e.target;
+        const isCorrect = selectedBtn.dataset.correct === "true";
+        if (isCorrect) {
+            selectedBtn.classList.add("correct");
+            score++;
+        }
+        else {
+            selectedBtn.classList.add("incorrect");
+        }
+        Array.from(answerButtons.children).forEach(button => {
+            if(button.dataset.correct === "true") {
+                button.classList.add("correct");
+            }
+            button.disabled = true;
+        });
+        nextButton.style.display = "block";
+    }
+    function showScore(){
+        resetState();
+        questionElement.innerHTML = `You Scored ${score} out of ${questions.length}!`;
+        nextButton.innerHTML = "Play Again";
+        nextButton.style.display = "block";
+    }
+
+
+    function handleNextButton(){
+        currentQuestionIndex++;
+        if(currentQuestionIndex < questions.length){
+            showQuestion();
+        }
+        else{
+            showScore();
+        }
+    }
+    nextButton.addEventListener("click", () =>{
+        if(currentQuestionIndex < questions.length){
+            handleNextButton();
+        }
+        else{
+            startQuiz();
+        }
+    })
+    startQuiz();
+</script>
+
+</html>
