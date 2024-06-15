@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font size -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e315459fa8.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/jpeg" href="./images/icon.png">
+    <title>Random password Generator</title>
+</head>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        background: #002339;
+        color: #fff;
+    }
+
+    .container {
+        margin: 12%;
+        width: 90%;
+        max-width: 700px;
+    }
+
+    .display {
+        width: 100%;
+        background: #fff;
+        margin-top: 50px;
+        margin-bottom: 30px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 26px 20px;
+        border-radius: 8px;
+    }
+
+    .container h1 {
+        font-weight: 500;
+        font-size: 45px;
+    }
+
+    .container h1 span {
+        color: #019f55;
+        border-bottom: 4px solid #019f55;
+        padding-bottom: 8px;
+    }
+
+    .display input {
+        border: 0px;
+        outline: 0px;
+        font-size: 25px;
+        background: transparent;
+    }
+
+    .fa-copy {
+        color: #019f55;
+        font-size: 35px;
+    }
+
+    .container button {
+        border: 0;
+        outline: 0;
+        background: #019f55;
+        color: #fff;
+        padding: 23px 20px;
+        font-size: 22px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 300;
+        cursor: pointer;
+    }
+
+    .fa-bolt {
+        padding-right: 5px;
+        font-size: 25px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1>Generate a <br><span>Random Password </span></h1>
+        <div class="display">
+            <input type="text" id="password" placeholder="Password">
+            <i class="fa-regular fa-copy" onclick="copyPassword()"></i>
+        </div>
+
+        <button onclick="createRandomPassword()"><i class="fa-solid fa-bolt"></i> Generate Password</button>
+    </div>
+    <script>
+        const passwordBox = document.getElementById("password");
+        const length = 16;
+        const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+        const numbers = "0123456789";
+        const specialSymobls = "!@#$%^&*()-_?/><,.`;=+-";
+
+        const allCharacters = upperCase + lowerCase + specialSymobls + numbers;
+
+        function createRandomPassword() {
+            let password = "";
+            password += upperCase[Math.floor(Math.random() * upperCase.length)];
+            password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+            password += numbers[Math.floor(Math.random() * numbers.length)];
+            password += specialSymobls[Math.floor(Math.random() * specialSymobls.length)];
+            while (length > password.length) {
+                password += allCharacters[Math.floor(Math.random() * allCharacters.length)];
+            }
+            passwordBox.value = password;
+        }
+        function copyPassword() {
+            passwordBox.select();
+            document.execCommand("copy");
+        }
+    </script>
+</body>
+
+</html>
