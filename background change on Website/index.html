@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font size -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e315459fa8.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/jpeg" href="./lightnig_favicon.png">
+    <title>Remove Background</title>
+</head>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        background: linear-gradient(95deg, coral, blue);
+    }
+
+    .container {
+        width: 90%;
+        max-width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: row;
+        margin: 10px auto;
+    }
+
+    h1 {
+        color: #d4d4d49f;
+        font-size: 100px;
+        margin: 10px auto;
+        width: 100%;
+        text-align: center;
+    }
+
+    .row {
+        width: 100%;
+        max-width: 500px;
+        backdrop-filter: blur(30px);
+        box-shadow: 0px 0px 30px rgba(227, 228, 237, 0.37);
+        border: 2px solid rgba(255, 255, 255, 0.18);
+        height: 500px;
+        align-self: flex-start;
+        border: 0;
+        outline: 0;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-evenly;
+        color: #fff;
+    }
+
+    #preview {
+        width: 100%;
+        max-width: 500px;
+        height: 500px;
+        border: 0;
+        outline: 0;
+        border-radius: 20px;
+        backdrop-filter: blur(30px);
+        box-shadow: 0px 0px 30px rgba(227, 228, 237, 0.37);
+        border: 2px solid rgba(255, 255, 255, 0.18);
+    }
+    form{
+        width: 100%;
+        height: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: column;
+    }
+    input[type="file"]{
+        display: none;
+    }
+    label{
+        display: inline-block;
+        text-transform: uppercase;
+        background: #c0392b;
+        text-align: center;
+        padding: 15px 20px;
+        font-size: 18px;
+        letter-spacing: 1.5px;
+        user-select: none;
+        cursor: pointer;
+        border-radius: 40px;
+    }
+
+    #preview h2 {
+        color: #d4d4d49f;
+        font-size: 30px;
+        margin: 10px auto;
+        width: 100%;
+        text-align: center;
+    }
+    #preview img{
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+</style>
+
+<body>
+    <h1>Backgorund Remover</h1>
+    <div class="container">
+        <div class="row">
+            <form>
+                <div class="form-group">
+                    <label for="file-picker">Choose image<label>
+                            <input class="from-control" id="file-picker" type="file">
+                </div>
+                <!-- defaultly all buttons are act like a submit button means once you click the button it will refresh automatically -->
+                <button onclick="handleUpload()" type="button">Upload</button>
+                <!-- api call using 50 times per month -->
+            </form>
+            <button onclick="downloadFile()" >Download</button>
+        </div>
+        <div id="preview">
+            <h2>preview</h2>
+
+        </div>
+    </div>
+</body>
+<script>
+    let imageurldownload;
+    function handleUpload() {
+        const previewBox = document.getElementById('preview');
+        const fileInput = document.getElementById('file-picker');
+        const image = fileInput.files[0];
+        const formData = new FormData();
+        formData.append("image_file", image);
+        formData.append('size', 'auto');
+        const apiKey = "XZUW67vVryeNgB4XKFNFXFM1";
+        fetch("https://api.remove.bg/v1.0/removebg", {
+            method: 'POST',
+            headers: {
+                'X-Api-key': apiKey,
+            },
+            body: formData
+        })
+            .then(function (response) {
+                return response.blob();
+                // blog is a binary form of object as output form server
+            })
+            .then(function (blob) {
+                console.log(blob);
+                const url = URL.createObjectURL(blob);
+                imageurldownload = url;
+
+                // Create a div to contain the image
+                let previewImg = document.createElement('div');
+
+                // Create the img element
+                let imgElement = document.createElement('img');
+                imgElement.src = url;
+
+                // Append the img element to the div
+                previewImg.appendChild(imgElement);
+
+                // Append the div to the preview box
+                previewBox.appendChild(previewImg);
+
+            })
+            .catch();
+
+        console.log("clicked");
+    }
+    function downloadFile() {
+        var anchorElement = document.createElement('a');
+        anchorElement.href = imageurldownload;
+        anchorElement.download = 'nobackground.png';
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+        document.body.removeChild(anchorElement);
+    }
+</script>
+
+</html>
