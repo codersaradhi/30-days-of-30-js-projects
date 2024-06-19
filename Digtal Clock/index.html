@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font size -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e315459fa8.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/jpeg" href="./lightnig_favicon.png">
+    <title>Digital clock</title>
+</head>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    .hero {
+        width: 100%;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #153677, #4e085f);
+        color: #fff;
+        position: relative;
+    }
+
+    .container {
+        width: 800px;
+        height: 180px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .clock {
+        width: 100%;
+        height: 100%;
+        background: rgba(235, 0, 255, 0.11);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(40px);
+
+    }
+
+    .container::before {
+        content: '';
+        width: 180px;
+        height: 180px;
+        background: coral;
+        position: absolute;
+        border-radius: 10px;
+        top: -50%;
+        left: -10%;
+        z-index: -1;
+    }
+
+    .container::after {
+        content: '';
+        width: 180px;
+        height: 180px;
+        background: lightblue;
+        position: absolute;
+        border-radius: 50%;
+        bottom: -50%;
+        right: -10%;
+        z-index: -1;
+    }
+
+    .clock span {
+        font-size: 80px;
+        width: 110px;
+        display: inline-block;
+        text-align: center;
+        position: relative;
+    }
+
+    .clock span::after {
+        font-size: 16px;
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #days::after {
+        content: var(--after-content, 'month');
+    }
+
+    #hrs::after {
+        content: 'Hours';
+    }
+
+    #mins::after {
+        content: 'Mintues';
+    }
+
+    #sec::after {
+        content: 'Seconds';
+    }
+</style>
+
+
+<body>
+    <div class="hero">
+        <div class="container">
+            <div class="clock">
+                <!-- <span id="months">month</span> -->
+                <span id="days">00</span>
+                <span>:</span>
+                <span id="hrs">00</span>
+                <span>:</span>
+                <span id="mins">00</span>
+                <span>:</span>
+                <span id="sec">00</span>
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let newContent;
+    let hrs = document.getElementById("hrs");
+    let min = document.getElementById("mins");
+    let sec = document.getElementById("sec");
+    let days = document.getElementById("days");
+    let monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      
+    setInterval(() => {
+        let currentTime = new Date();
+        console.log(currentTime);
+        newContent = monthNames[currentTime.getMonth()];
+        hrs.innerHTML = (currentTime.getHours() < 10 ? "0" : "") + currentTime.getHours();
+        min.innerHTML = (currentTime.getMinutes() < 10 ? "0" : "") + currentTime.getMinutes();
+        sec.innerHTML = (currentTime.getSeconds() < 10 ? "0" : "") + currentTime.getSeconds();
+        days.innerHTML = (currentTime.getDate() < 10 ? "0" : "") + currentTime.getDate();
+        changeContent(newContent);
+    }, 1000);
+    function changeContent() {
+        document.getElementById('days').style.setProperty('--after-content', `"${newContent}"`);
+    }
+    
+</script>
+
+</html>
