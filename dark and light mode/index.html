@@ -20,6 +20,14 @@
         box-sizing: border-box;
         font-family: "Poppins", sans-serif;
     }
+    :root{
+        --light-color: #fff;
+        --dark-color: #000;
+    }
+    .darkmode{
+        --light-color: #000;
+        --dark-color: #fff;
+    }
     #container{
         width: 100%;
         height: 100vh;
@@ -27,16 +35,16 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background: #fff;
+        background: var(--light-color);
     }
     #container img{
         width: 50px;
         height: 50px;
         margin: 10px;
     }
-    .container p{
-        color: #000;
-        font-size: 10px;
+    #container p{
+        color: var(--dark-color);
+        font-size: 12px;
     }
 </style>
 <body>
@@ -54,13 +62,16 @@
     toggle.onclick = function(){
         if(isSun){
             toggle.src = "./sun.png";
-            backcolor.style.background = "#000";
-            text.style.color = "#fff";
+            // backcolor.style.background = "#000";
+            // text.style.color = "#fff";
+            document.body.classList.toggle("darkmode");
         }
         else{
             toggle.src = "./moon.png";
-            backcolor.style.background = "#fff";
-            text.style.color = "#000";
+            // backcolor.style.background = "#fff";
+            // text.style.color = "#000";
+            document.body.classList.toggle("darkmode");
+
         }
         isSun = !isSun; // toggle the state
     }
