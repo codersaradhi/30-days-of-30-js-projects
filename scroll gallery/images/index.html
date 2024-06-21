@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrolling gallery</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+            background: #191919;
+    }
+    .gallery {
+        width: 900px;
+        display: flex;
+        overflow-x: scroll;
+    }
+    .gallery div{
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-gap:20px;
+        padding: 10px;
+        flex: none;
+    }
+    .gallery div img{
+        width: 100%;
+        filter: grayscale(100%);
+        transition: transform 0.5s;
+    }
+    .gallery::-webkit-scrollbar{
+        display: none;
+    }
+    .gallery-wrap{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10%;
+    }
+    #NextBtn,#BackBtn{
+        width: 75px;
+        cursor: pointer;
+        margin: 40px;
+    }
+    .gallery div img:hover{
+        filter: grayscale(0);
+        cursor: pointer;
+        transform: scale(1.1);
+    }
+</style>
+<body>
+    <div class="gallery-wrap">
+        <img src="./back.png" id="BackBtn">
+        <div class="gallery">
+            <div>
+                <span><img src="./image-1.png" alt=""></span>
+                <span><img src="./image-2.png" alt=""></span>
+                <span><img src="./image-3.png" alt=""></span>
+            </div>
+            <div>
+                <span><img src="./image-4.png" alt=""></span>
+                <span><img src="./image-5.png" alt=""></span>
+                <span><img src="./image-6.png" alt=""></span>
+            </div>
+        </div>
+        <img src="./next.png" id="NextBtn">
+    </div>
+    
+</body>
+<script>
+    let scrollContainer = document.querySelector(".gallery");
+    let backBtn = document.getElementById('BackBtn');
+    let nextBtn = document.getElementById('NextBtn');
+    scrollContainer.addEventListener("wheel",(evt) =>{
+        evt.preventDefault();//prevent default scroll action
+        scrollContainer.scrollLeft += evt.deltaY;
+        scrollContainer.style.scrollBehavior ="smooth";
+    });
+    nextBtn.addEventListener("click",()=>{
+        scrollContainer.style.scrollBehavior ="smooth";
+        scrollContainer.scrollLeft += 900;
+    });
+    backBtn.addEventListener("click",()=>{
+        scrollContainer.style.scrollBehavior ="smooth";
+        scrollContainer.scrollLeft -= 900;
+    });
+
+</script>
+</html>
