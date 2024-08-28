@@ -1,4 +1,4 @@
-                                                                                        30 Days of JavaScript
+30 Days of JavaScript
 
 This repository contains a curated collection of 30 JavaScript projects, designed to help you strengthen your JavaScript skills through practical, hands-on experience. Each project is carefully crafted to introduce new concepts and reinforce existing knowledge.
 
